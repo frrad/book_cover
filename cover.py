@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 
 
-import fire
 import tempfile
-from PIL import Image
-from typing import List
-import pikepdf
 from decimal import Decimal
+from typing import List
+
+import fire
+import pikepdf
+from PIL import Image
 
 
 def split_book_cover(image: Image.Image, back_width: int, front_width: int):
