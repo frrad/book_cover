@@ -1,3 +1,5 @@
+## What does it do?
+
 Given a JPG cover spread, generates PDFs for front, back, spine suitable for
 printing.
 
@@ -10,6 +12,7 @@ printing.
 1. convert to PDF
 1. mark the bleed area in the PDF metadata
 
+## Usage
 
 To invoke, run
 ```
@@ -17,4 +20,13 @@ To invoke, run
 ```
 
 Many values are hardcoded, but it should be easy to expose them as parameters if
-necessary.
+necessary. Send PRs!
+
+
+## Setup
+
+```
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
