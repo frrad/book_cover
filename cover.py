@@ -198,3 +198,81 @@ def add_bleed_box(
             pdf.save(output_pdf_path)
 
         print(f"Bleed box added and saved to {output_pdf_path}")
+
+
+def main(in_file_path: str):
+    img = Image.open(in_file_path)
+
+    back_img, spine_img, front_img = split_book_cover(
+        img, back_width=1630, front_width=1625
+    )
+
+    dpi = 300
+
+    target_height_in = 8.5
+    target_width_in = 11 / 2.0
+    target_spine_width = 0.65
+
+    target_cover_width_px = int(target_width_in * dpi)
+    target_height_px = int(target_height_in * dpi)
+    target_spine_width_px = int(target_spine_width * dpi)
+
+    cover_dims = (target_cover_width_px, target_height_px)
+    spine_dims = (target_spine_width_px, target_height_px)
+
+    front_scaled = front_img.resize(cover_dims)
+    back_scaled = back_img.resize(cover_dims)
+    spine_scaled = spine_img.resize(spine_dims)
+
+    rescaled_all = concatenate_images_horizontally(
+        [back_scaled, spine_scaled, front_scaled]
+    )
+
+    bleed_size_in = 0.125
+    bleed_size_px = int(bleed_size_in * dpi)
+
+    stretched = add_stretched_border(
+        rescaled_all, bleed_size_px, stretch_pixel_width=10
+    )
+
+    back_with_bleed, spine_with_bleed, front_with_bleed = split_book_cover(
+        stretched,
+        back_width=target_cover_width_px + bleed_size_px,
+        front_width=target_cover_width_px + bleed_size_px,
+    )
+
+    add_bleed_box(
+        back_with_bleed,
+        dpi,
+        "back.pdf",
+        full_width_px=target_cover_width_px + bleed_size_px,
+        full_height_px=target_height_px + 2 * bleed_size_px,
+        left_offset_px=bleed_size_px,
+        bottom_offset_px=bleed_size_px,
+        right_offset_px=0,
+        top_offset_px=bleed_size_px,
+    )
+
+    add_bleed_box(
+        spine_with_bleed,
+        dpi,
+        "spine.pdf",
+        full_width_px=target_spine_width_px,
+        full_height_px=target_height_px + 2 * bleed_size_px,
+        left_offset_px=0,
+        bottom_offset_px=bleed_size_px,
+        right_offset_px=0,
+        top_offset_px=bleed_size_px,
+    )
+
+    add_bleed_box(
+        front_with_bleed,
+        dpi,
+        "front.pdf",
+        full_width_px=target_cover_width_px + bleed_size_px,
+        full_height_px=target_height_px + 2 * bleed_size_px,
+        left_offset_px=0,
+        bottom_offset_px=bleed_size_px,
+        right_offset_px=bleed_size_px,
+        top_offset_px=bleed_size_px,
+    )
