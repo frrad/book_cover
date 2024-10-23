@@ -204,8 +204,8 @@ def add_bleed_box(
         print(f"Bleed box added and saved to {output_pdf_path}")
 
 
-def main(in_file_path: str):
-    img = Image.open(in_file_path)
+def main(cover_spread: str):
+    img = Image.open(cover_spread)
 
     back_img, spine_img, front_img = split_book_cover(
         img, back_width=1630, front_width=1625
