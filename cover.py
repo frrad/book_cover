@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+
+
+import fire
 import tempfile
 from PIL import Image
 from typing import List
@@ -276,3 +280,7 @@ def main(in_file_path: str):
         right_offset_px=bleed_size_px,
         top_offset_px=bleed_size_px,
     )
+
+
+if __name__ == "__main__":
+    fire.Fire(main)
